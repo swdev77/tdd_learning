@@ -9,7 +9,7 @@ import 'mock_my_console.dart';
 
 void main() {
   group('Features', () {
-    test('print account statement', () {
+    test('print account statement', () async {
       final myConsole = MockMyConsole();
       final myClock = MockMyClock();
       final transaction = TransactionRepository(clock: myClock);
@@ -19,7 +19,12 @@ void main() {
         statementPrinter: statementPrinter,
       );
 
-      when(() => myClock.todayAsString()).thenReturn('24/04/2025');
+      final dates = ["01/04/2025", "02/04/2025", "10/04/2025"];
+      int counter = 0;
+
+      when(() => myClock.todayAsString()).thenAnswer((_) {
+        return dates[counter++];
+      });
 
       account.deposit(1000);
       account.withdraw(100);
@@ -27,18 +32,12 @@ void main() {
 
       account.printStatement();
 
-      verify(
-        () => myConsole.printLn("DATE       | AMOUNT    | BALANCE "),
-      ).called(1);
-      verify(
-        () => myConsole.printLn("10/04/2025 | 500.00    | 1400.00 "),
-      ).called(1);
-      verify(
-        () => myConsole.printLn("02/04/2025 | -100.00   | 900.00 "),
-      ).called(1);
-      verify(
-        () => myConsole.printLn("01/04/2025 | 1000.00   | 1000.00 "),
-      ).called(1);
+      verifyInOrder([
+        () => myConsole.printLn("DATE | AMOUNT | BALANCE"),
+        () => myConsole.printLn("10/04/2025 | 500.00 | 1400.00"),
+        () => myConsole.printLn("02/04/2025 | -100.00 | 900.00"),
+        () => myConsole.printLn("01/04/2025 | 1000.00 | 1000.00"),
+      ]);
     });
   });
 }

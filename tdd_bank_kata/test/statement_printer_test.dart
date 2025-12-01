@@ -7,6 +7,7 @@ import 'mock_my_console.dart';
 
 void main() {
   group('statement printer should', () {
+    const String statementHeader = "DATE | AMOUNT | BALANCE";
     final myConsole = MockMyConsole();
     final statementPrinter = StatementPrinter(console: myConsole);
     test('print header', () {
@@ -15,7 +16,9 @@ void main() {
       statementPrinter.print(noTransactions);
 
       verify(
-        () => myConsole.printLn("DATE    | AMOUNT    | BALANCE "),
+        () {
+          return myConsole.printLn(statementHeader);
+        },
       ).called(1);
     });
 
@@ -29,10 +32,10 @@ void main() {
       statementPrinter.print(transactions);
 
       verifyInOrder([
-        () => myConsole.printLn("DATE    | AMOUNT    | BALANCE "),
-        () => myConsole.printLn("10/04/2025 | 500      | 1300     "),
-        () => myConsole.printLn("02/04/2025 | -200     | 800      "),
-        () => myConsole.printLn("01/04/2025 | 1000     | 1000     "),
+        () => myConsole.printLn(statementHeader),
+        () => myConsole.printLn("10/04/2025 | 500.00 | 1300.00"),
+        () => myConsole.printLn("02/04/2025 | -200.00 | 800.00"),
+        () => myConsole.printLn("01/04/2025 | 1000.00 | 1000.00"),
       ]);
     });
   });
