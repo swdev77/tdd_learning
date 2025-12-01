@@ -1,6 +1,7 @@
-# tdd_bank_kata
+# TDD Bank Kata
 
-A new Flutter project.
+This project implements the classic Bank Kata using Test-Driven Development (TDD) principles. The goal is to build a simple banking application with core functionalities like depositing, withdrawing, and printing a statement, while demonstrating a rigorous TDD workflow.
+
 
 ## Getting Started
 
